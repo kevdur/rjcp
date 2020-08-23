@@ -1,8 +1,7 @@
-% !TEX engine = xelatex
-%
+%===============================================================================
 % Change-point models with Hamiltonian and reversible jump Markov chain Monte
 % Carlo.
-%
+%===============================================================================
 
 \documentclass[11pt,a4paper]{article}
   
@@ -298,8 +297,11 @@ to the position variables~$\ub{s}$ and~$\ub{h}$---follows in two parts:
 \end{align*}
 These equations, combined with the kinetic energy function given
 in~\eqref{eqn:kinetic}, are enough for a first implementation of
-HMC\footnote{See Figure~2 of Neal, \textit{MCMC Using Hamiltonian Dynamics}.}
-for example with the variances of the momenta all set to~$m_i = 1$.
+HMC\footnote{See Figure~2 of Neal, \textit{MCMC Using Hamiltonian
+Dynamics}.}---for example with the variances of the momenta all set to~$m_i =
+1$.
+
+\subsection{Constrained parameters} %===========================================
 
 Such a direct approach, however, has a few issues, the first of which is
 straightforward: the discrete application of Hamilton's equations (usually via
@@ -312,10 +314,10 @@ locations to be ordered, but HMC as we have currently implemented it is by no
 means guaranteed to respect such an ordering, since two locations may have their
 order reversed by a single leapfrog step.
 
-A useful way of avoiding boundary issues is to trasform the position variables
+A useful way of avoiding boundary issues is to transform the position variables
 to an unconstrained space before applying HMC. For example, instead of working
 with step heights~$h_i \ge 0$, we might apply HMC to the element-wise logarithm
-of~$\ub{h}$, each~$\log h_i$ is an unrestricted real number. For variables that
+of~$\ub{h}$, since~$\log h_i$ is an unrestricted real number. For variables that
 are bounded both above and below, such as~$s_i \in (0,L)$, one can first
 transform them to the open unit interval and then apply the logit
 function~$\log(x/(1-x))$, which maps~$(0,1)$ onto the real line. The
@@ -427,7 +429,7 @@ implied by the derivatives diverges from the Hamiltonian's real behaviour.
 
 \begin{figure}[t]
   \centering
-  \include{figures/loc}
+  \include{img/loc}
   \caption{An example of the issue caused by the discontinuities
     in~$U(\ub{\hat{s},\ub{\hat{h}}})$: the first plot shows the value of the
     Hamiltonian as a single step location~$s_2$ is varied, while the second
@@ -471,7 +473,7 @@ Each birth move involves the creation of a new change point at a location chosen
 randomly from~$[0,L]$, say~$s^* \in [s_i, s_{i+1})$. If accepted, such a move
 would create two new intervals~$[s_i, s^*)$ and~$[s^*, s_{i+1})$, and replace
 the step height~$h_i$ with two new heights~$h_i'$ and~$h_{i+1}'$. It is here
-where the so-called `dimension matching' contraint of reversible jump MCMC is
+where the so-called `dimension matching' constraint of reversible jump MCMC is
 applied: we are free to propose values for the new parameters~$(s^*, h_i',
 h_{i+1}')$ however we wish, as long as the same (but inverted) method is used in
 the corresponding reverse move (in this case, the `death' move).
